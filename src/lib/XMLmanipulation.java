@@ -27,6 +27,16 @@ public class XMLmanipulation {
     public XMLmanipulation() {
     }
 
+    /**
+     *
+     *   Abre Arquivo .jff do JFlap e carrega em um objeto
+     *   da Classe AFD
+     *
+     *  @return m Afd
+     *
+     *  @param caminho String
+     *
+     * */
     public Afd load(String caminho) {
         Transition trans = null;
         State state = null;
@@ -142,6 +152,13 @@ public class XMLmanipulation {
         return afd;
     }
 
+    /**
+     * Recebe um objeto do Tipo Afd e salva em um arquivo XML .jff
+     * para ser aberto no JFlap
+     *
+     * @param m
+     * @param caminho
+     */
 
     public void salve(Afd m, String caminho) {
 
