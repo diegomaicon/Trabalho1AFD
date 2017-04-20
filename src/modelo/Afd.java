@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 /**
  * Created by Diego on 18/04/2017.
+ *
+ * Classe de Autômato
  */
 public class Afd {
 
@@ -30,7 +32,11 @@ public class Afd {
     public Afd() {
     }
 
-
+    /**
+     * teste
+     *
+     * @return
+     */
     public ArrayList<State> geteFinal() {
         return eFinal;
     }
