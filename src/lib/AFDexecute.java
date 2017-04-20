@@ -25,7 +25,6 @@ public class AFDexecute {
 
     public boolean accept(Afd m,String word) {
         char palavra[] = word.toCharArray();
-
         ArrayList<Transition> listTrans = m.getFuncTransicao();
         ArrayList<Character> alfabeto = m.getAlfabeto();
 
@@ -49,4 +48,27 @@ public class AFDexecute {
         } else return false;
 
     }
+
+
+   public State move(Afd m,State estado ,String word){
+       char palavra[] = word.toCharArray();
+       ArrayList<Transition> listTrans = m.getFuncTransicao();
+       ArrayList<Character> alfabeto = m.getAlfabeto();
+       State estadoAtual = estado;
+
+       for (char w :palavra) {
+           if (alfabeto.contains(w)) {
+               for (Transition t : listTrans) {
+                   if (estadoAtual.getId() == t.getFrom().getId()) {
+                       if (t.getRead().equals(w)) {
+                           estadoAtual = t.getTo();
+                           break;
+                       }
+                   }else return estadoAtual;
+               }
+           } else return estadoAtual;
+       }
+        return estadoAtual;
+
+   }
 }
