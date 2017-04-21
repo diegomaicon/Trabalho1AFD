@@ -125,4 +125,50 @@ public class AFDmanipulation {
         m.setFuncTransicao(listTransition);
         return m;
     }
+
+
+    /**
+     *
+     *  Determina se dois estados são equivalentes ou não
+     *
+     *  @param state1 Estado a ser comparado
+     *  @param state2 Outro estado a ser comparado
+     *  @return Se state 1 é equivalente a state2
+     *
+     */
+    public boolean equivalents(Afd m,State state1, State state2){
+
+        boolean achou = false;
+
+        if(state1.iseFinal() && !state2.iseFinal()){
+            return achou;
+        } else if (state1.iseInicial() && !state2.iseInicial()){
+            return achou;
+        }
+        Transition aux1 = new Transition();
+        Transition aux2 = new Transition();
+
+        for(char letra:m.getAlfabeto()) {
+
+            for (Transition transFrom: m.getFuncTransicao()) {
+                if (transFrom.getFrom().getId() == state1.getId() && transFrom.getRead().equals(letra)){
+                    aux1 = transFrom;
+                }
+                if (transFrom.getFrom().getId() == state2.getId() && transFrom.getRead().equals(letra)){
+                    aux2 = transFrom;
+                }
+
+            }
+
+            if (aux1.getTo() != null && aux2.getTo() != null) {
+                if (aux1.getTo().getId() == aux2.getTo().getId()) {
+                    achou = true;
+                }
+            } else achou = false;
+        }
+
+        return achou;
+    }
+
+
 }

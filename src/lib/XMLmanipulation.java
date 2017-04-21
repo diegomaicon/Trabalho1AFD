@@ -127,7 +127,7 @@ public class XMLmanipulation {
                                     }
                                     break;
                                 case "read":
-                                    if (!alafabeto.contains(elementoFilhoT.getTextContent())) {
+                                    if (!alafabeto.contains(elementoFilhoT.getTextContent().charAt(0))) {
                                         alafabeto.add(elementoFilhoT.getTextContent().charAt(0));
                                     }
                                     trans.setRead(elementoFilhoT.getTextContent().charAt(0));

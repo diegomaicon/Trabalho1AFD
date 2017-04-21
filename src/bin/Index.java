@@ -21,30 +21,34 @@ public class Index {
 
 
         //Item
-        m = xml.load("teste.jff");
+        m = xml.load("max.jff");
 
 
         //Item 2
        // xml.salve(m,"saida.jff");
 
-        // AFDmanipulation afdm = new AFDmanipulation();
+        AFDmanipulation afdm = new AFDmanipulation();
 
         // //Item 7
        // m = afdm.deleteState(m,1);
-
+/*
         // Item 6a
         if (exe.accept(m,"bbba"))
             System.out.println("Aceita");
         else System.out.println("Não Aceita");
-
+*/
+/*
         //  Item 6b
         State estado = m.geteInicial();
         estado = exe.move(m,estado,"bbb");
         if(estado.iseFinal())
             System.out.println("Aceita");
         else System.out.println("Não Aceita");
+*/
 
 
-
+        if (afdm.equivalents(m,m.getEstado().get(0),m.getEstado().get(4))){
+            System.out.println("Equivalente");
+        } else System.out.println("Não equivalente");
     }
 }
