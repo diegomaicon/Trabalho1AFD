@@ -60,6 +60,65 @@ public class AFDmanipulation {
         return m;
     }
 
+
+    /**
+     * Deleta estado, se exixtir na lista de estado.
+     *
+     * @param m Objeto do AFD
+     * @param id Id do estado, que será deletado
+     * @return m Objeto do AFD
+     */
+    public Afd deleteState(Afd m, int id, int idnovo) {
+        ArrayList<State> listState = m.getEstado();
+        State aux = new State();
+        for (State e : listState) {
+            if (e.getId() == id) {
+                aux = e;
+            }
+        }
+        listState.remove(aux);
+        m = alteraTransicaoTo(m,id,idnovo);
+        m.setEstado(listState);
+        return m;
+    }
+
+    /**
+     * Atualiza transações From, para novo ID de estado criado
+     * @param m
+     * @param id
+     * @param idnovo
+     * @return
+     */
+    public Afd alteraTransicaoFrom(Afd m,int id,int idnovo){
+        ArrayList<Transition> listTransition = m.getFuncTransicao();
+        for (Transition t:listTransition) {
+            if(t.getFrom().getId() == id) {
+                t.getFrom().setId(idnovo);
+            }
+        }
+
+        m.setFuncTransicao(listTransition);
+        return m;
+    }
+
+    /**
+     *   Atualiza transações TO, para novo ID de estado criado
+     * @param m
+     * @param id
+     * @param idnovo
+     * @return
+     */
+    public Afd alteraTransicaoTo(Afd m,int id,int idnovo){
+        ArrayList<Transition> listTransition = m.getFuncTransicao();
+        for (Transition t:listTransition) {
+            if(t.getTo().getId() == id) {
+                t.getTo().setId(idnovo);
+            }
+        }
+
+        m.setFuncTransicao(listTransition);
+        return m;
+    }
     /**
      * Deleta estado, se exixtir na lista de estado.
      *
@@ -105,7 +164,7 @@ public class AFDmanipulation {
     }
 
     /**
-     *  Deleta transições, que chega ao estado eccluído.
+     *  Deleta transições, que chega ao estado excluído.
      *  Recebe como parâmetro um objeto de AFD, e o ID do estado excluído
      *
      * @param m
@@ -173,11 +232,17 @@ public class AFDmanipulation {
         return equi;
     }
 
-
+    /**
+     *  Função te retorna uma liata com dois estados equivalentes entre si,
+     *  cada componente da lista tem dois estados, estado1 e estado2, ambos equivalentes.
+     *
+     * @param m
+     * @return
+     */
     public ArrayList<Equivalente> equivalents(Afd m){
         ArrayList<State> listaState = m.getEstado();
         ArrayList<Equivalente> eEquiv = new ArrayList<Equivalente>();
-        Equivalente aux = new Equivalente();
+        Equivalente aux;
 
         for (int i = 0; i < listaState.size()-1 ; i++) {
             for (int j = i+1; j <listaState.size() ; j++) {
@@ -190,4 +255,43 @@ public class AFDmanipulation {
 
         return eEquiv;
     }
+
+    /**
+     *  Algoritimo de minimidazação, exclui um dos estados equivalentes e atualiza
+     *  transição para o novo ID de estado Criado
+     * @param m
+     * @param listEquiv
+     * @return
+     */
+    public Afd minimum(Afd m,ArrayList<Equivalente> listEquiv) {
+        State novo = new State();
+        Transition t;
+        ArrayList<Transition> listExcluiTrans;
+
+        for (int i = 0; i < listEquiv.size(); i++) {
+            listExcluiTrans =new ArrayList<Transition>();
+
+            for (Transition trans : m.getFuncTransicao()) {
+
+                if (listEquiv.get(i).getState2().getId() == trans.getFrom().getId()) {
+                    String id = listEquiv.get(i).getState1().getId() + "" + listEquiv.get(i).getState2().getId();
+                    novo.setId(Integer.parseInt(id));
+                    novo.seteInicial(listEquiv.get(i).getState1().iseInicial());
+                    novo.seteInicial(listEquiv.get(i).getState1().iseFinal());
+                    novo.setX(listEquiv.get(i).getState1().getX());
+                    novo.setY(listEquiv.get(i).getState1().getY());
+                    listExcluiTrans.add(trans);
+                }
+            }
+
+            for (Transition t1: listExcluiTrans) {
+                m = deleteTransition(m, t1.getFrom().getId(), t1.getTo().getId(), t1.getRead());
+
+            }
+            m = alteraTransicaoFrom(m,listEquiv.get(i).getState1().getId(),novo.getId());
+            m = deleteState(m,listEquiv.get(i).getState2().getId(),novo.getId());
+        }
+        return m;
+    }
+
 }

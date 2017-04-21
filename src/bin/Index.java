@@ -27,12 +27,12 @@ public class Index {
 
 
         //Item 2
-       // xml.salve(m,"saida.jff");
+        // xml.salve(m,"saida.jff");
 
         AFDmanipulation afdm = new AFDmanipulation();
 
         // //Item 7
-       // m = afdm.deleteState(m,1);
+        // m = afdm.deleteState(m,1);
 /*
         // Item 6a
         if (exe.accept(m,"bbba"))
@@ -48,8 +48,15 @@ public class Index {
         else System.out.println("Não Aceita");
 */
 
-
+        // Item 4a
          ArrayList<Equivalente> eqv =  afdm.equivalents(m);
          System.out.println("ok");
+
+        //Item 4b
+        afdm.minimum(m,eqv);
+
+    xml.salve(m,"saida.jff");
+
+
     }
 }
