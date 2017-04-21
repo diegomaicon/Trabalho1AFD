@@ -1,6 +1,7 @@
 package lib;
 
 import modelo.Afd;
+import modelo.Equivalente;
 import modelo.State;
 import modelo.Transition;
 
@@ -129,21 +130,20 @@ public class AFDmanipulation {
 
     /**
      *
-     *  Determina se dois estados são equivalentes ou não
+     *  Determina se dois estados são equivalentes ou não e retorna os dois se foram equivalentes.
      *
      *  @param state1 Estado a ser comparado
      *  @param state2 Outro estado a ser comparado
      *  @return Se state 1 é equivalente a state2
      *
      */
-    public boolean equivalents(Afd m,State state1, State state2){
-
-        boolean achou = false;
+    private Equivalente states2Equi(Afd m,State state1, State state2){
+        Equivalente equi = new Equivalente();
 
         if(state1.iseFinal() && !state2.iseFinal()){
-            return achou;
+            return equi;
         } else if (state1.iseInicial() && !state2.iseInicial()){
-            return achou;
+            return equi;
         }
         Transition aux1 = new Transition();
         Transition aux2 = new Transition();
@@ -162,13 +162,32 @@ public class AFDmanipulation {
 
             if (aux1.getTo() != null && aux2.getTo() != null) {
                 if (aux1.getTo().getId() == aux2.getTo().getId()) {
-                    achou = true;
+
+                    equi.setState1(state1);
+                    equi.setState2(state2);
+                    return equi;
                 }
-            } else achou = false;
+            }
         }
 
-        return achou;
+        return equi;
     }
 
 
+    public ArrayList<Equivalente> equivalents(Afd m){
+        ArrayList<State> listaState = m.getEstado();
+        ArrayList<Equivalente> eEquiv = new ArrayList<Equivalente>();
+        Equivalente aux = new Equivalente();
+
+        for (int i = 0; i < listaState.size()-1 ; i++) {
+            for (int j = i+1; j <listaState.size() ; j++) {
+              aux = states2Equi(m,listaState.get(i),listaState.get(j));
+              if (aux.getState1() != null) {
+                  eEquiv.add(aux);
+              }
+            }
+        }
+
+        return eEquiv;
+    }
 }

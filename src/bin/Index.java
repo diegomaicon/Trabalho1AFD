@@ -4,9 +4,11 @@ import lib.AFDexecute;
 import lib.AFDmanipulation;
 import lib.XMLmanipulation;
 import modelo.Afd;
+import modelo.Equivalente;
 import modelo.State;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by Diego on 19/04/2017.
@@ -47,8 +49,7 @@ public class Index {
 */
 
 
-        if (afdm.equivalents(m,m.getEstado().get(0),m.getEstado().get(4))){
-            System.out.println("Equivalente");
-        } else System.out.println("Não equivalente");
+         ArrayList<Equivalente> eqv =  afdm.equivalents(m);
+         System.out.println("ok");
     }
 }
