@@ -89,7 +89,7 @@ public class AFDmanipulation {
      * @param idnovo
      * @return
      */
-    public Afd alteraTransicaoFrom(Afd m,int id,int idnovo){
+    private Afd alteraTransicaoFrom(Afd m,int id,int idnovo){
         ArrayList<Transition> listTransition = m.getFuncTransicao();
         for (Transition t:listTransition) {
             if(t.getFrom().getId() == id) {
@@ -108,7 +108,7 @@ public class AFDmanipulation {
      * @param idnovo
      * @return
      */
-    public Afd alteraTransicaoTo(Afd m,int id,int idnovo){
+    private Afd alteraTransicaoTo(Afd m,int id,int idnovo){
         ArrayList<Transition> listTransition = m.getFuncTransicao();
         for (Transition t:listTransition) {
             if(t.getTo().getId() == id) {
@@ -294,4 +294,20 @@ public class AFDmanipulation {
         return m;
     }
 
+    /**
+     *  Metodo que realiza complemeto de um autômato.
+     *  estados final, viram não finais e não finais viram finais.
+     *
+     * @param m
+     * @return
+     */
+    public Afd complement(Afd m){
+        for (State e :m.getEstado()) {
+            if (e.iseFinal()){
+                e.seteFinal(false);
+            }
+            else e.seteFinal(true);
+        }
+        return m;
+    }
 }

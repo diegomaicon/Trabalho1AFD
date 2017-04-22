@@ -48,14 +48,16 @@ public class Index {
         else System.out.println("Não Aceita");
 */
 
-        // Item 4a
+        // Item 3a
          ArrayList<Equivalente> eqv =  afdm.equivalents(m);
          System.out.println("ok");
 
-        //Item 4b
+        //Item 3b
         afdm.minimum(m,eqv);
+        //Item 5a
+        m = afdm.complement(m);
 
-    xml.salve(m,"saida.jff");
+        xml.salve(m,"saida.jff");
 
 
     }
