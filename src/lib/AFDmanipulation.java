@@ -208,7 +208,6 @@ public class AFDmanipulation {
         Transition aux2 = new Transition();
 
         for(char letra:m.getAlfabeto()) {
-
             for (Transition transFrom: m.getFuncTransicao()) {
                 if (transFrom.getFrom().getId() == state1.getId() && transFrom.getRead().equals(letra)){
                     aux1 = transFrom;
@@ -216,17 +215,44 @@ public class AFDmanipulation {
                 if (transFrom.getFrom().getId() == state2.getId() && transFrom.getRead().equals(letra)){
                     aux2 = transFrom;
                 }
-
             }
 
             if (aux1.getTo() != null && aux2.getTo() != null) {
                 if (aux1.getTo().getId() == aux2.getTo().getId()) {
-
                     equi.setState1(state1);
                     equi.setState2(state2);
                     return equi;
                 }
             }
+        }
+
+        int fim1 = 0,fim2 = 0;
+        int noFim1=0,noFim2 = 0;
+
+        for(char letra:m.getAlfabeto()) {
+
+            for (Transition transFrom: m.getFuncTransicao()) {
+                if (transFrom.getFrom().getId() == state1.getId() && transFrom.getRead().equals(letra)){
+                    if(transFrom.getTo().iseFinal()) {
+                       fim1++;
+                    } else noFim1++;
+                }
+            }
+
+
+            for (Transition transFrom: m.getFuncTransicao()) {
+                if (transFrom.getFrom().getId() == state2.getId() && transFrom.getRead().equals(letra)){
+                    if (transFrom.getTo().iseFinal()){
+                        fim2++;
+                    } else noFim2++;
+                }
+            }
+        }
+
+        if ( (fim1 == fim2) && (noFim1 == noFim2)){
+            equi.setState1(state1);
+            equi.setState2(state2);
+            return equi;
         }
 
         return equi;
@@ -269,7 +295,7 @@ public class AFDmanipulation {
         ArrayList<Transition> listExcluiTrans;
 
         for (int i = 0; i < listEquiv.size(); i++) {
-            listExcluiTrans =new ArrayList<Transition>();
+            listExcluiTrans = new ArrayList<Transition>();
 
             for (Transition trans : m.getFuncTransicao()) {
 

@@ -53,11 +53,12 @@ public class Index {
          System.out.println("ok");
 
         //Item 3b
-        afdm.minimum(m,eqv);
-        //Item 5a
-        m = afdm.complement(m);
+        m = afdm.minimum(m,eqv);
 
-        xml.salve(m,"saida.jff");
+        //Item 5a
+       // m = afdm.complement(m);
+
+        xml.salve(m,"mim.jff");
 
 
     }
