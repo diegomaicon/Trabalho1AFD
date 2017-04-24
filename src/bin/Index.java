@@ -7,6 +7,7 @@ import modelo.Afd;
 import modelo.Equivalente;
 import modelo.State;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -16,16 +17,65 @@ import java.util.ArrayList;
 public class Index {
 
 
+    public static void start(){
+
+        AFDmanipulation afdm = new AFDmanipulation();
+        XMLmanipulation xml = new XMLmanipulation();
+        String print="";
+        String caminhoEntrada1 ="";
+        String caminhoEntrada2 ="";
+        String saida ="";
+        Afd m ;
+        ArrayList<Equivalente> eqv;
+
+        String op = JOptionPane.showInputDialog(null," Digite a opção:\n [ 1 ]  Imprimir estados equivalentes (Item 3).\n"+
+                                                                              " [ 2 ]   Obter versão mínima do AFD (Item 3).\n"+
+                                                                              " [ 3 ]   Automatos equivalentes (Item 4).\n"+
+                                                                              " [ 4 ]   Complemento do Altômato (Item 5).\n"+
+                                                                              " [ 5 ]   União de Autômato (Item 5).\n"+
+                                                                              " [ 6 ]   Interseção de Autômato (Item 5).\n"+
+                                                                              " [ 7 ]   Diferença de Autômato (Item 5).\n"+
+                                                                              " [ 8 ]   Aceita Palavra - Testar a pertença de uma palavra na linguagem (Item 6).\n"+
+                                                                              " [ 9 ]   Aceita Palavra - Testar movimentos (Item 6).\n"+
+                                                                              " [ 10 ]  Alterar Autômato (Item 7)\n");
+
+
+        switch (Integer.parseInt(op)){
+
+            case 1:
+               caminhoEntrada1 = JOptionPane.showInputDialog(null,"Informe nome arquivo entrada.");
+                m = xml.load(caminhoEntrada1+".jff");
+                 eqv =  afdm.equivalents(m);
+                for (Equivalente e:eqv) {
+                     print += "Estado "+e.getState1().getId()+" = "+e.getState2().getId()+"\n";
+                }
+                JOptionPane.showMessageDialog(null,print);
+                break;
+            case 2:
+                caminhoEntrada1 = JOptionPane.showInputDialog(null,"Informe nome arquivo entrada.");
+                m = xml.load(caminhoEntrada1+".jff");
+                eqv =  afdm.equivalents(m);
+                m = afdm.minimum(m,eqv);
+                saida = JOptionPane.showInputDialog(null,"Informe nome arquivo entrada");
+                xml.salve(m,saida+".jff");
+                break;
+        }
+
+
+    }
+
     public static void main(String[] args) throws IOException {
 
         XMLmanipulation xml = new XMLmanipulation();
         AFDexecute exe = new AFDexecute();
 
+        Index.start();
+
 
         //Item
         Afd m = xml.load("max.jff");
-        Afd uni1 = xml.load("union1.jff");
-        Afd uni2 = xml.load("union2.jff");
+        Afd uni1 = xml.load("u1.jff");
+        Afd uni2 = xml.load("u2.jff");
 
 
         //Item 2
