@@ -17,13 +17,15 @@ public class Index {
 
 
     public static void main(String[] args) throws IOException {
-        Afd m = new Afd();
+
         XMLmanipulation xml = new XMLmanipulation();
         AFDexecute exe = new AFDexecute();
 
 
         //Item
-        m = xml.load("max.jff");
+        Afd m = xml.load("max.jff");
+        Afd uni1 = xml.load("union1.jff");
+        Afd uni2 = xml.load("union2.jff");
 
 
         //Item 2
@@ -58,7 +60,9 @@ public class Index {
         //Item 5a
        // m = afdm.complement(m);
 
-        xml.salve(m,"mim.jff");
+        m = afdm.union(uni1,uni2);
+
+        xml.salve(m,"unionFinal.jff");
 
 
     }
