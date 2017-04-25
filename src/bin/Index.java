@@ -69,11 +69,13 @@ public class Index {
         XMLmanipulation xml = new XMLmanipulation();
         AFDexecute exe = new AFDexecute();
 
-        Index.start();
+  //      Index.start();
+
+
 
 
         //Item
-        Afd m = xml.load("max.jff");
+        Afd m = xml.load("max4.jff");
         Afd uni1 = xml.load("u1.jff");
         Afd uni2 = xml.load("u2.jff");
 
@@ -110,9 +112,9 @@ public class Index {
         //Item 5a
        // m = afdm.complement(m);
 
-        m = afdm.union(uni1,uni2);
+       // m = afdm.union(uni1,uni2);
 
-        xml.salve(m,"unionFinal.jff");
+        xml.salve(m,"mim4.jff");
 
 
     }
