@@ -6,10 +6,22 @@ package modelo;
 public class Equivalente {
     private State state1;
     private State state2;
+    private boolean Status;
 
-    public Equivalente(State state1, State state2) {
+
+    public Equivalente(State state1, State state2, boolean status) {
         this.state1 = state1;
         this.state2 = state2;
+        Status = status;
+    }
+
+    public boolean isStatus() {
+
+        return Status;
+    }
+
+    public void setStatus(boolean status) {
+        Status = status;
     }
 
     public Equivalente() {

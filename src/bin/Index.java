@@ -25,7 +25,7 @@ public class Index {
         String caminhoEntrada1 ="";
         String caminhoEntrada2 ="";
         String saida ="";
-        Afd m ;
+        Afd m1,m2;
         ArrayList<Equivalente> eqv;
 
         String op = JOptionPane.showInputDialog(null," Digite a opção:\n [ 1 ]  Imprimir estados equivalentes (Item 3).\n"+
@@ -40,27 +40,107 @@ public class Index {
                                                                               " [ 10 ]  Alterar Autômato (Item 7)\n");
 
 
-        switch (Integer.parseInt(op)){
+        switch (Integer.parseInt(op)) {
 
             case 1:
-               caminhoEntrada1 = JOptionPane.showInputDialog(null,"Informe nome arquivo entrada.");
-                m = xml.load(caminhoEntrada1+".jff");
-                 eqv =  afdm.equivalents(m);
-                for (Equivalente e:eqv) {
-                     print += "Estado "+e.getState1().getId()+" = "+e.getState2().getId()+"\n";
+                do {
+                    caminhoEntrada1 = JOptionPane.showInputDialog(null, "Informe nome arquivo entrada.");
+                    m1 = xml.load(caminhoEntrada1 + ".jff");
+                    if (m1.getEstado() == null) {
+                        JOptionPane.showMessageDialog(null, "Arquivo inexistente!");
+                    }
+                } while (m1.getEstado() == null);
+                eqv = afdm.equivalents(m1);
+                for (Equivalente e : eqv) {
+                    print += "Estado -> " + e.getState1().getId() + " = " + e.getState2().getId() + "\n";
                 }
-                JOptionPane.showMessageDialog(null,print);
+                JOptionPane.showMessageDialog(null, print);
                 break;
+
             case 2:
-                caminhoEntrada1 = JOptionPane.showInputDialog(null,"Informe nome arquivo entrada.");
-                m = xml.load(caminhoEntrada1+".jff");
-                eqv =  afdm.equivalents(m);
-                m = afdm.minimum(m,eqv);
-                saida = JOptionPane.showInputDialog(null,"Informe nome arquivo entrada");
-                xml.salve(m,saida+".jff");
+                do {
+                    caminhoEntrada1 = JOptionPane.showInputDialog(null, "Informe nome arquivo entrada.");
+                    m1 = xml.load(caminhoEntrada1 + ".jff");
+                    if (m1.getEstado() == null) {
+                        JOptionPane.showMessageDialog(null, "Arquivo inexistente!");
+                    }
+                } while (m1.getEstado() == null);
+                eqv = afdm.equivalents(m1);
+                m1 = afdm.minimum(m1, eqv);
+                saida = JOptionPane.showInputDialog(null, "Informe nome arquivo entrada");
+                xml.salve(m1, saida + ".jff");
+                break;
+            case 4://Complemeto
+                do {
+                    caminhoEntrada1 = JOptionPane.showInputDialog(null, "Informe nome arquivo entrada.");
+                    m1 = xml.load(caminhoEntrada1 + ".jff");
+                    if (m1.getEstado() == null) {
+                        JOptionPane.showMessageDialog(null, "Arquivo inexistente!");
+                    }
+                } while (m1.getEstado() == null);
+                m1 = afdm.complement(m1);
+                saida = JOptionPane.showInputDialog(null, "Informe nome arquivo entrada");
+                xml.salve(m1, saida + ".jff");
+                break;
+            case 5: //União
+                do {
+                    caminhoEntrada1 = JOptionPane.showInputDialog(null, "Informe nome arquivo AFD 1 entrada.");
+                    m1 = xml.load(caminhoEntrada1 + ".jff");
+                    if (m1.getEstado() == null) {
+                        JOptionPane.showMessageDialog(null, "Arquivo inexistente!");
+                    }
+                } while (m1.getEstado() == null);
+                do {
+                    caminhoEntrada2 = JOptionPane.showInputDialog(null, "Informe nome arquivo AFD 2 entrada.");
+                    m2 = xml.load(caminhoEntrada2 + ".jff");
+                    if (m2.getEstado() == null) {
+                        JOptionPane.showMessageDialog(null, "Arquivo inexistente!");
+                    }
+                } while (m2.getEstado() == null);
+                m1 = afdm.union(m1,m2);
+                saida = JOptionPane.showInputDialog(null, "Informe nome arquivo entrada");
+                xml.salve(m1, saida + ".jff");
+                break;
+
+            case 6: //Interseção
+                do {
+                    caminhoEntrada1 = JOptionPane.showInputDialog(null, "Informe nome arquivo AFD 1 entrada.");
+                    m1 = xml.load(caminhoEntrada1 + ".jff");
+                    if (m1.getEstado() == null) {
+                        JOptionPane.showMessageDialog(null, "Arquivo inexistente!");
+                    }
+                } while (m1.getEstado() == null);
+                do {
+                    caminhoEntrada2 = JOptionPane.showInputDialog(null, "Informe nome arquivo AFD 2 entrada.");
+                    m2 = xml.load(caminhoEntrada2 + ".jff");
+                    if (m2.getEstado() == null) {
+                        JOptionPane.showMessageDialog(null, "Arquivo inexistente!");
+                    }
+                } while (m2.getEstado() == null);
+                m1 = afdm.intersection(m1,m2);
+                saida = JOptionPane.showInputDialog(null, "Informe nome arquivo entrada");
+                xml.salve(m1, saida + ".jff");
+                break;
+            case 7: //Diferença
+                do {
+                    caminhoEntrada1 = JOptionPane.showInputDialog(null, "Informe nome arquivo AFD 1 entrada.");
+                    m1 = xml.load(caminhoEntrada1 + ".jff");
+                    if (m1.getEstado() == null) {
+                        JOptionPane.showMessageDialog(null, "Arquivo inexistente!");
+                    }
+                } while (m1.getEstado() == null);
+                do {
+                    caminhoEntrada2 = JOptionPane.showInputDialog(null, "Informe nome arquivo AFD 2 entrada.");
+                    m2 = xml.load(caminhoEntrada2 + ".jff");
+                    if (m2.getEstado() == null) {
+                        JOptionPane.showMessageDialog(null, "Arquivo inexistente!");
+                    }
+                } while (m2.getEstado() == null);
+                m1 = afdm.intersection(m1,afdm.complement(m2));
+                saida = JOptionPane.showInputDialog(null, "Informe nome arquivo entrada");
+                xml.salve(m1, saida + ".jff");
                 break;
         }
-
 
     }
 
@@ -69,15 +149,12 @@ public class Index {
         XMLmanipulation xml = new XMLmanipulation();
         AFDexecute exe = new AFDexecute();
 
-  //      Index.start();
-
-
-
+       // Index.start();
 
         //Item
-        Afd m = xml.load("max4.jff");
-        Afd uni1 = xml.load("u1.jff");
-        Afd uni2 = xml.load("u2.jff");
+        Afd m = xml.load("max.jff");
+        Afd inter1 = xml.load("d2.jff");
+        Afd inter2 = xml.load("d1.jff");
 
 
         //Item 2
@@ -103,18 +180,21 @@ public class Index {
 */
 
         // Item 3a
-         ArrayList<Equivalente> eqv =  afdm.equivalents(m);
+        // ArrayList<Equivalente> eqv =  afdm.equivalents(m);
          System.out.println("ok");
 
         //Item 3b
-        m = afdm.minimum(m,eqv);
+        //m = afdm.minimum(m,eqv);
 
         //Item 5a
        // m = afdm.complement(m);
 
-       // m = afdm.union(uni1,uni2);
+        //m = afdm.intersection(inter1,inter2);
+        //diferença
+       // m = afdm.intersection(inter1,afdm.complement(inter2));
 
-        xml.salve(m,"mim4.jff");
+        //m = afdm.union(inter1,inter2);
+        xml.salve(m,"difference2.jff");
 
 
     }

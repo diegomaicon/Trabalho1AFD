@@ -46,109 +46,111 @@ public class XMLmanipulation {
 
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(caminho);
+            if (doc != null) {
+                NodeList listState = doc.getElementsByTagName("state");
+                ArrayList<State> e = new ArrayList<State>();
+                ArrayList<State> eF = new ArrayList<State>();
 
-            NodeList listState = doc.getElementsByTagName("state");
-            ArrayList<State> e = new ArrayList<State>();
-            ArrayList<State> eF = new ArrayList<State>();
+                for (int i = 0; i < listState.getLength(); i++) {
+                    Node noState = listState.item(i);
+                    if (noState.getNodeType() == Node.ELEMENT_NODE) {
+                        Element elementoState = (Element) noState;
+                        state = new State();
 
-            for (int i = 0; i < listState.getLength(); i++) {
-                Node noState = listState.item(i);
-                if (noState.getNodeType() == Node.ELEMENT_NODE) {
-                    Element elementoState = (Element) noState;
-                    state = new State();
+                        String id = elementoState.getAttribute("id");
+                        state.setId(Integer.parseInt(id));
 
-                    String id = elementoState.getAttribute("id");
-                    state.setId(Integer.parseInt(id));
+                        NodeList listFilhoState = elementoState.getChildNodes();
 
-                    NodeList listFilhoState = elementoState.getChildNodes();
+                        for (int j = 0; j < listFilhoState.getLength(); j++) {
+                            Node noFilho = listFilhoState.item(j);
+                            if (noFilho.getNodeType() == Node.ELEMENT_NODE) {
+                                Element elementoFilho = (Element) noFilho;
 
-                    for (int j = 0; j < listFilhoState.getLength(); j++) {
-                        Node noFilho = listFilhoState.item(j);
-                        if (noFilho.getNodeType() == Node.ELEMENT_NODE) {
-                            Element elementoFilho = (Element) noFilho;
+                                switch (elementoFilho.getTagName()) {
 
-                            switch (elementoFilho.getTagName()) {
+                                    case "initial":
+                                        state.seteInicial(true);
+                                        afd.seteInicial(state);
+                                        break;
+                                    case "final":
+                                        state.seteFinal(true);
+                                        eF.add(state);
+                                        break;
 
-                                case "initial":
-                                    state.seteInicial(true);
-                                    afd.seteInicial(state);
-                                    break;
-                                case "final":
-                                    state.seteFinal(true);
-                                    eF.add(state);
-                                    break;
+                                    case "x":
+                                        state.setX(elementoFilho.getTextContent());
+                                        break;
 
-                                case "x":
-                                    state.setX(elementoFilho.getTextContent());
-                                    break;
+                                    case "y":
+                                        state.setY(elementoFilho.getTextContent());
+                                        break;
 
-                                case "y":
-                                    state.setY(elementoFilho.getTextContent());
-                                    break;
-
+                                }
                             }
                         }
                     }
+                    e.add(state);
                 }
-                e.add(state);
-            }
-            afd.seteFinal(eF);
-            afd.setEstado(e);
+                afd.seteFinal(eF);
+                afd.setEstado(e);
 
-            NodeList listTrans = doc.getElementsByTagName("transition");
-            ArrayList<Transition> t = new ArrayList<Transition>();
-            ArrayList<Character> alafabeto = new ArrayList<Character>();
-            for (int i = 0; i < listTrans.getLength(); i++) {
-                Node noTrans = listTrans.item(i);
-                if (noTrans.getNodeType() == Node.ELEMENT_NODE) {
-                    Element elementoTrans = (Element) noTrans;
-                    trans = new Transition();
+                NodeList listTrans = doc.getElementsByTagName("transition");
+                ArrayList<Transition> t = new ArrayList<Transition>();
+                ArrayList<Character> alafabeto = new ArrayList<Character>();
+                for (int i = 0; i < listTrans.getLength(); i++) {
+                    Node noTrans = listTrans.item(i);
+                    if (noTrans.getNodeType() == Node.ELEMENT_NODE) {
+                        Element elementoTrans = (Element) noTrans;
+                        trans = new Transition();
 
-                    NodeList listFilhoTrans = elementoTrans.getChildNodes();
+                        NodeList listFilhoTrans = elementoTrans.getChildNodes();
 
-                    for (int j = 0; j < listFilhoTrans.getLength(); j++) {
-                        Node noFilhoT = listFilhoTrans.item(j);
-                        if (noFilhoT.getNodeType() == Node.ELEMENT_NODE) {
-                            Element elementoFilhoT = (Element) noFilhoT;
+                        for (int j = 0; j < listFilhoTrans.getLength(); j++) {
+                            Node noFilhoT = listFilhoTrans.item(j);
+                            if (noFilhoT.getNodeType() == Node.ELEMENT_NODE) {
+                                Element elementoFilhoT = (Element) noFilhoT;
 
-                            switch (elementoFilhoT.getTagName()) {
-                                case "from":
-                                    for (State aux : e) {
-                                        if (aux.getId() == Integer.parseInt(elementoFilhoT.getTextContent())) {
-                                            trans.setFrom(aux);
+                                switch (elementoFilhoT.getTagName()) {
+                                    case "from":
+                                        for (State aux : e) {
+                                            if (aux.getId() == Integer.parseInt(elementoFilhoT.getTextContent())) {
+                                                trans.setFrom(aux);
+                                            }
                                         }
-                                    }
-                                    break;
-                                case "to":
-                                    for (State aux : e) {
-                                        if (aux.getId() == Integer.parseInt(elementoFilhoT.getTextContent())) {
-                                            trans.setTo(aux);
+                                        break;
+                                    case "to":
+                                        for (State aux : e) {
+                                            if (aux.getId() == Integer.parseInt(elementoFilhoT.getTextContent())) {
+                                                trans.setTo(aux);
+                                            }
                                         }
-                                    }
-                                    break;
-                                case "read":
-                                    if (!alafabeto.contains(elementoFilhoT.getTextContent().charAt(0))) {
-                                        alafabeto.add(elementoFilhoT.getTextContent().charAt(0));
-                                    }
-                                    trans.setRead(elementoFilhoT.getTextContent().charAt(0));
-                                    break;
+                                        break;
+                                    case "read":
+                                        if (!alafabeto.contains(elementoFilhoT.getTextContent().charAt(0))) {
+                                            alafabeto.add(elementoFilhoT.getTextContent().charAt(0));
+                                        }
+                                        trans.setRead(elementoFilhoT.getTextContent().charAt(0));
+                                        break;
+                                }
                             }
                         }
                     }
+                    t.add(trans);
                 }
-                t.add(trans);
+                afd.setAlfabeto(alafabeto);
+                afd.setFuncTransicao(t);
+
             }
-            afd.setAlfabeto(alafabeto);
-            afd.setFuncTransicao(t);
 
-
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch(ParserConfigurationException e){
+                e.printStackTrace();
+        } catch(SAXException e){
+                e.printStackTrace();
+        } catch(IOException e){
+               return afd;
         }
+
         return afd;
     }
 
