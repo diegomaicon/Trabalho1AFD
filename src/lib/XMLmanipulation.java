@@ -43,7 +43,6 @@ public class XMLmanipulation {
         Afd afd = new Afd();
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(caminho);
             if (doc != null) {
@@ -140,7 +139,6 @@ public class XMLmanipulation {
                 }
                 afd.setAlfabeto(alafabeto);
                 afd.setFuncTransicao(t);
-
             }
 
         } catch(ParserConfigurationException e){
@@ -150,7 +148,6 @@ public class XMLmanipulation {
         } catch(IOException e){
                return afd;
         }
-
         return afd;
     }
 

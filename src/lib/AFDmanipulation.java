@@ -19,13 +19,12 @@ public class AFDmanipulation {
      *
      * @param m Objeto de AFD
      * @param id Identificador do estado
-     * @param ini se for inicial
      * @param fin se for final
      * @return
      */
-    public Afd addState(Afd m, int id, boolean ini, boolean fin) {
+    public Afd addState(Afd m, int id, boolean fin) {
         ArrayList<State> listState = m.getEstado();
-        listState.add(new State(id, 0.0, 0.0, ini, fin));
+        listState.add(new State(id,"0.0","0.0",fin, false));
         m.setEstado(listState);
         return m;
     }
@@ -170,12 +169,18 @@ public class AFDmanipulation {
      * @param from
      * @return m
      */
-    private Afd deleteTransition(Afd m,int from){
+    private Afd deleteTransition(Afd m,int id){
         ArrayList<Transition> listTransition = m.getFuncTransicao();
         ArrayList<Transition> listTransitionExclui = new ArrayList<Transition>();
 
         for (Transition t:listTransition) {
-            if (t.getFrom().getId() == from){
+            if (t.getFrom().getId() == id){
+                listTransitionExclui.add(t);
+            }
+        }
+
+        for (Transition t:listTransition) {
+            if (t.getTo().getId() == id){
                 listTransitionExclui.add(t);
             }
         }
@@ -186,119 +191,6 @@ public class AFDmanipulation {
         return m;
     }
 
-
-    /**
-     *
-     *  Determina se dois estados são equivalentes ou não e retorna os dois se foram equivalentes.
-     *
-     *  @param state1 Estado a ser comparado
-     *  @param state2 Outro estado a ser comparado
-     *  @return Se state 1 é equivalente a state2
-     *
-     */
-    private Equivalente statesNoEqui(Afd m,State state1, State state2){
-        Equivalente equi = null;
-
-        //Vefificando é final e outro inicial ou inicial e final, ou seja não são equivalentes
-        if((state1.iseFinal() && !state2.iseFinal()) || (state2.iseFinal() && !state1.iseFinal()) ){
-            equi = new Equivalente(state1,state2,false);
-        } else  equi = new Equivalente(state1,state2,true);
-        return equi;
-    }
-
-    private ArrayList<Equivalente> buscaStateEqui(Afd m,ArrayList<Equivalente> noEqui,State state1,State state2){
-        Equivalente equi = null;
-        ArrayList<Equivalente> revEquiv = new ArrayList<Equivalente>();
-
-
-        State to1 = new State();
-        State to2 = new State();
-        boolean achou = false;
-
-        for(char letra:m.getAlfabeto()) {
-            for (Transition transFrom: m.getFuncTransicao()) {
-                if (transFrom.getFrom().getId() == state1.getId() && transFrom.getRead().equals(letra)){
-                  to1 = transFrom.getTo();
-                }
-            }
-
-
-            for (Transition transFrom: m.getFuncTransicao()) {
-                if (transFrom.getFrom().getId() == state2.getId() && transFrom.getRead().equals(letra)){
-                   to2 = transFrom.getTo();
-                }
-            }
-            for (Equivalente listaNoEqui:noEqui) {
-                if ((listaNoEqui.getState1().getId() == to1.getId()) && (listaNoEqui.getState2().getId() == to2.getId()) ||
-                     (listaNoEqui.getState1().getId() == to2.getId()) && (listaNoEqui.getState2().getId() == to1.getId())){
-                     equi = new Equivalente(to1,to2,false);
-                }
-
-            }
-
-            if(equi != null){
-                   noEqui.add(equi);
-                   return noEqui;
-            }  else{
-                    equi = new Equivalente(to1,to2,true);
-                    revEquiv.add(equi);
-                    equi = null;
-                }
-        }
-
-        return revEquiv;
-    }
-
-
-
-    /**
-     *  Função te retorna uma lista com dois estados equivalentes entre si,
-     *  cada componente da lista tem dois estados, estado1 e estado2, ambos equivalentes.
-     *
-     * @param m
-     * @return
-     */
-    public ArrayList<Equivalente> equivalents(Afd m){
-        ArrayList<State> listaState = m.getEstado();
-        ArrayList<Equivalente> noEquiv = new ArrayList<Equivalente>();
-        ArrayList<Equivalente> eEquiv = new ArrayList<Equivalente>();
-        ArrayList<Equivalente> revEquiv = new ArrayList<Equivalente>();
-        ArrayList<Equivalente> eFinal = new ArrayList<Equivalente>();
-
-        Equivalente aux;
-        int cont=0;
-
-        for (int i = 0; i < listaState.size()-1; i++) {
-            for (int j = i+1; j < listaState.size() ; j++) {
-              aux = statesNoEqui(m,listaState.get(i),listaState.get(j));
-              if(!aux.isStatus())
-                  noEquiv.add(aux);
-              else  eEquiv.add(aux);
-            }
-        }
-
-        for (Equivalente eq: eEquiv) {
-            revEquiv = buscaStateEqui(m, noEquiv, eq.getState1(), eq.getState2());
-
-            for (Equivalente e: revEquiv) {
-                if(e.getState1().getId() == e.getState2().getId()){
-                    cont++;
-                }
-            }
-            if (cont>=0){
-                eFinal.add( new Equivalente(eq.getState1(), eq.getState2(),true));
-                cont=0;
-            }
-        }
-
-        return eFinal;
-    }
-
-    public boolean equivalents(Afd m1,Afd m2){
-
-
-        return false;
-    }
     /**
      *  Algoritimo de minimidazação, exclui um dos estados equivalentes e atualiza
      *  transição para o novo ID de estado Criado
