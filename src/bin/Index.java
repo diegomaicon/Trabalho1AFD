@@ -55,7 +55,7 @@ public class Index {
 
         //m = afdm.union(inter1,inter2);
       //  xml.salve(m,"mim3.jff");
-
+//
         System.out.println("Fim");
 
     }
