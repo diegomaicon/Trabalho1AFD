@@ -3,9 +3,11 @@ package modelo;
 import java.util.ArrayList;
 
 /**
- * Created by Diego on 18/04/2017.
+ * Created by
+ *  	Diego Maicon Silva - 11913 - diego_maicon20@hotmail.com
+ *      Déborah Aparecida Resende - 11823 - deboraharesende@gmail.com
  *
- * Classe de Autômato
+ *      on 19/04/2017.
  */
 public class Afd {
 

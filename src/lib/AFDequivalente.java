@@ -5,7 +5,11 @@ import modelo.*;
 import java.util.ArrayList;
 
 /**
- * Created by Debora on 02/05/2017.
+ * Created by
+ *  	Diego Maicon Silva - 11913 - diego_maicon20@hotmail.com
+ *      Déborah Aparecida Resende - 11823 - deboraharesende@gmail.com
+ *
+ *      on 19/04/2017.
  */
 public class AFDequivalente {
     private Coordenadas idStates;
