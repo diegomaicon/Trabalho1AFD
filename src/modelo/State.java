@@ -4,11 +4,11 @@ package modelo;
  * Created by Diego on 19/04/2017.
  */
 public class State {
-    private int id;
-    private String x;
-    private String y;
-    private boolean eFinal;
-    private boolean eInicial;
+    private int id;            // Identificador do Estado
+    private String x;          // Posição no Eixo X no JFLAP
+    private String y;          // Posição no Eixo Y no JFLAP
+    private boolean eFinal;    // Se é estado Final
+    private boolean eInicial;  // Se é etado Inicial
 
     public State(int id, String x, String y, boolean eFinal, boolean eInicial) {
         this.id = id;

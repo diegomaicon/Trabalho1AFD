@@ -29,7 +29,7 @@ public class Gui {
         ArrayList<Equivalente> eqv ;
         do {
 
-             op = JOptionPane.showInputDialog(null, " Digite a opção:\n [ 1 ]  Imprimir estados equivalentes (Item 3).\n" +
+            op = JOptionPane.showInputDialog(null, " Digite a opção:\n [ 1 ]  Imprimir estados equivalentes (Item 3).\n" +
                     " [ 2 ]   Obter versão mínima do AFD (Item 3).\n\n" +
                     " [ 3 ]   Automatos equivalentes (Item 4).\n\n" +
                     " [ 4 ]   Complemento do Altômato (Item 5).\n" +
@@ -47,7 +47,7 @@ public class Gui {
 
 
             switch (Integer.parseInt(op)) {
-                case 1:
+                case 1: //Estados Equivalentes
                     do {
                         caminhoEntrada1 = JOptionPane.showInputDialog(null, "Informe nome arquivo entrada.");
                         m1 = xml.load(caminhoEntrada1 + ".jff");
@@ -55,7 +55,7 @@ public class Gui {
                             JOptionPane.showMessageDialog(null, "Arquivo inexistente!");
                         }
                     } while (m1.getEstado() == null);
-                    eqv = afde.equivalents(m1);
+                    eqv = AFDequivalente.equivalents(m1);
                     for (Equivalente e : eqv) {
                         print += "Estado -> " + e.getState1().getId() + " = " + e.getState2().getId() + "\n";
                     }
@@ -64,7 +64,7 @@ public class Gui {
                     eqv.clear();
                     break;
 
-                case 2:
+                case 2://Minimização de autômato
                     do {
                         caminhoEntrada1 = JOptionPane.showInputDialog(null, "Informe nome arquivo entrada.");
                         m1 = xml.load(caminhoEntrada1 + ".jff");
@@ -72,11 +72,30 @@ public class Gui {
                             JOptionPane.showMessageDialog(null, "Arquivo inexistente!");
                         }
                     } while (m1.getEstado() == null);
-                    eqv = afde.equivalents(m1);
+                    eqv = AFDequivalente.equivalents(m1);
                     m1 = afdm.minimum(m1, eqv);
                     saida = JOptionPane.showInputDialog(null, "Informe nome arquivo entrada");
                     xml.salve(m1, saida + ".jff");
                     eqv.clear();
+                    break;
+                case 3: //Autômato Equivalente
+                    do {
+                        caminhoEntrada1 = JOptionPane.showInputDialog(null, "Informe nome arquivo AFD 1 entrada.");
+                        m1 = xml.load(caminhoEntrada1 + ".jff");
+                        if (m1.getEstado() == null) {
+                            JOptionPane.showMessageDialog(null, "Arquivo inexistente!");
+                        }
+                    } while (m1.getEstado() == null);
+                    do {
+                        caminhoEntrada2 = JOptionPane.showInputDialog(null, "Informe nome arquivo AFD 2 entrada.");
+                        m2 = xml.load(caminhoEntrada2 + ".jff");
+                        if (m2.getEstado() == null) {
+                            JOptionPane.showMessageDialog(null, "Arquivo inexistente!");
+                        }
+                    } while (m2.getEstado() == null);
+                    if (AFDequivalente.equivalents(m1,m2))
+                        JOptionPane.showMessageDialog(null, " SIM ", "Autômatos Equivalentes", JOptionPane.INFORMATION_MESSAGE);
+                    else JOptionPane.showMessageDialog(null, " NÃO ", "Autômatos Equivalentes", JOptionPane.ERROR_MESSAGE);
                     break;
                 case 4://Complemeto
                     do {
@@ -195,7 +214,7 @@ public class Gui {
 
                     int fin = JOptionPane.showConfirmDialog(null,"Estado Final ?","",JOptionPane.YES_NO_OPTION);
                     if (fin == 1)
-                         afdm.addState(m1, m1.getEstado().size()+1,false);
+                        afdm.addState(m1, m1.getEstado().size()+1,false);
                     else
                         afdm.addState(m1, m1.getEstado().size()+1,true);
 
@@ -213,9 +232,9 @@ public class Gui {
                         }
                     } while (m1.getEstado() == null);
 
-                   m1 = afdm.addTransition(m1,Integer.parseInt(JOptionPane.showInputDialog(null,"Saindo do estado. ")),
-                                          Integer.parseInt(JOptionPane.showInputDialog(null,"Chegando do estado. ")),
-                                          JOptionPane.showInputDialog(null,"Gastando, escolha: "+ m1.getAlfabeto().toString()).charAt(0));
+                    m1 = afdm.addTransition(m1,Integer.parseInt(JOptionPane.showInputDialog(null,"Saindo do estado. ")),
+                            Integer.parseInt(JOptionPane.showInputDialog(null,"Chegando do estado. ")),
+                            JOptionPane.showInputDialog(null,"Gastando, escolha: "+ m1.getAlfabeto().toString()).charAt(0));
                     xml.salve(m1, caminhoEntrada1 + ".jff");
                     JOptionPane.showMessageDialog(null,"Transação Adicionada !");
                     break;

@@ -61,7 +61,12 @@ public class AFDequivalente {
         return tabelaMinimizacao;
     }
 
-    public  ArrayList<Equivalente> equivalents(Afd afd) {
+    /**
+     *  Estados equivalentes
+     * @param afd
+     * @return ArrayList<Equivalente>
+     */
+    public static ArrayList<Equivalente> equivalents(Afd afd) {
 
         ArrayList<AFDequivalente> tabelaMinimizacao = CarregaAfdMinimizacao(afd.getEstado());
         for (AFDequivalente t : tabelaMinimizacao) {
@@ -116,7 +121,36 @@ public class AFDequivalente {
         return listaEquivalentes;
     }
 
-    public static State retornaState(Afd afd, int idState){
+    /**
+     *
+     * Autômatos equivalentes
+     * @param afd1
+     * @param afd2
+     * @return boolean
+     */
+    public static  boolean equivalents(Afd afd1, Afd afd2){
+
+        ArrayList<State> novoState = afd1.getEstado();
+        novoState.addAll(retornaNovosStates(afd2.getEstado(),afd1.getEstado().size()));
+        afd1.setEstado(novoState);
+        ArrayList<Transition> novaFuncaoTransicao = afd1.getFuncTransicao();
+        novaFuncaoTransicao.addAll(afd2.getFuncTransicao());
+        afd1.setFuncTransicao(novaFuncaoTransicao);
+        ArrayList<State> finalStates = afd1.geteFinal();
+        finalStates.addAll(afd2.geteFinal());
+        ArrayList<Equivalente> equivalentes = equivalents(afd1);
+        for (Equivalente e : equivalentes){
+          //  System.out.println("estados iniciais eq: " +e.getState1().getId()+"-"+e.getState2().getId());
+            if (e.getState1().iseInicial() && e.getState2().iseInicial()){
+                return true;
+            }
+        }
+
+
+        return false;
+    }
+
+    private static State retornaState(Afd afd, int idState){
         State state = new State();
         for (State s : afd.getEstado()){
             if(s.getId()==idState){
@@ -130,7 +164,7 @@ public class AFDequivalente {
         return state;
     }
 
-    public static boolean verificarMarcacaoEq(ArrayList<AFDequivalente> tabelaMinimizacao, int coordenadaA, int coordenadaB) {
+    private static boolean verificarMarcacaoEq(ArrayList<AFDequivalente> tabelaMinimizacao, int coordenadaA, int coordenadaB) {
         for (AFDequivalente t : tabelaMinimizacao) {
             if ((t.getId().getCoordenadaA() == coordenadaA && t.getId().getCoordenadaB() == coordenadaB) || (t.getId().getCoordenadaA() == coordenadaB && t.getId().getCoordenadaB() == coordenadaA)) {
                 return t.isEquivalente();
@@ -139,7 +173,7 @@ public class AFDequivalente {
         return true;
     }
 
-    public static int verificaDestinoState(ArrayList<Transition> listaTransicao, int idStateFrom, char letra) {
+    private static int verificaDestinoState(ArrayList<Transition> listaTransicao, int idStateFrom, char letra) {
         for (Transition t : listaTransicao) {
             if (t.getFrom().getId() == idStateFrom && (t.getRead() == letra)) {
                 return t.getTo().getId();
@@ -148,7 +182,7 @@ public class AFDequivalente {
         return -1;
     }
 
-    public static boolean verificaEqStates(ArrayList<AFDequivalente> tabelaMinimizacao, int coordenadaA, int coordenadaB) {
+    private static boolean verificaEqStates(ArrayList<AFDequivalente> tabelaMinimizacao, int coordenadaA, int coordenadaB) {
         for (AFDequivalente t : tabelaMinimizacao) {
             if (((t.getId().getCoordenadaA() == coordenadaA) && t.getId().getCoordenadaB() == coordenadaB) || ((t.getId().getCoordenadaA() == coordenadaB) && t.getId().getCoordenadaB() == coordenadaA)) {
                 return t.isEquivalente();
@@ -157,7 +191,7 @@ public class AFDequivalente {
         return true;
     }
 
-    public static boolean finalState(Afd afd, int idEstado) {
+    private static boolean finalState(Afd afd, int idEstado) {
         ArrayList<State> listaFinalState = afd.geteFinal();
         for (State l : listaFinalState) {
             if (l.getId() == idEstado) {
@@ -167,12 +201,20 @@ public class AFDequivalente {
         return false;
     }
 
-    public static boolean verificaExistencia(ArrayList<AFDequivalente> tabelaMinimizacao, int coordenadaA, int coordenadaB) {
+    private static boolean verificaExistencia(ArrayList<AFDequivalente> tabelaMinimizacao, int coordenadaA, int coordenadaB) {
         for (AFDequivalente t : tabelaMinimizacao) {
             if (((t.getId().getCoordenadaA() == coordenadaA) && (t.getId().getCoordenadaB() == coordenadaB)) || ((t.getId().getCoordenadaA() == coordenadaB) && (t.getId().getCoordenadaB() == coordenadaA))) {
                 return true;
             }
         }
         return false;
+    }
+
+    private static ArrayList<State> retornaNovosStates(ArrayList<State> states, int incremento){
+
+        for (State s: states ){
+            s.setId(s.getId()+incremento);
+        }
+        return (states);
     }
 }
