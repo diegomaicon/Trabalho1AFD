@@ -14,7 +14,8 @@ public class Index {
 
     public static void main(String[] args) throws IOException {
         Gui.start();
-        //testando comentario
+
+        //testando c
         System.out.println("Fim");
 
     }
