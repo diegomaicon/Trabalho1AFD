@@ -3,7 +3,7 @@ package modelo;
 /**
  * Created by
  *  	Diego Maicon Silva - 11913 - diego_maicon20@hotmail.com
- *      Déborah Aparecida Resende - 11823 - deboraharesende@gmail.com
+ *      Déborah Aparecida Resende - 11823 - deboraharesende94@gmail.com
  *
  *      on 19/04/2017.
  */
