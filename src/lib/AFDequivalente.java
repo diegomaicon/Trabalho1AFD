@@ -196,11 +196,11 @@ public class AFDequivalente {
     }
 
     /**
-     * APAGAAAAAAAAAAAAAAAAAAAAAAAAR
+     * Verifica se o objeto com aquelas coordenadas são equivalentes
      * @param tabelaMinimizacao
      * @param coordenadaA
      * @param coordenadaB
-     * @return
+     * @return boolean se é ou nao equivalente
      */
     private static boolean verificaEqStates(ArrayList<AFDequivalente> tabelaMinimizacao, int coordenadaA, int coordenadaB) {
         for (AFDequivalente t : tabelaMinimizacao) {

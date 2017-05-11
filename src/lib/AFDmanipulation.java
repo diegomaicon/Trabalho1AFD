@@ -195,7 +195,7 @@ public class AFDmanipulation {
     }
 
     /**
-     *  Algoritimo de minimidazação, exclui um dos estados equivalentes e atualiza
+     *  Algoritmo de minimidazação, exclui um dos estados equivalentes e atualiza
      *  transição para o novo ID de estado Criado
      * @param m
      * @param listEquiv
