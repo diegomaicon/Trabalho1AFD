@@ -18,7 +18,7 @@ public class AFDmanipulation {
     }
 
     /**
-     *  Adicona um estado na lista de estados do autômato
+     *  Adiciona um estado na lista de estados do autômato
      *
      * @param m Objeto de AFD
      * @param id Identificador do estado
@@ -62,7 +62,7 @@ public class AFDmanipulation {
 
 
     /**
-     * Deleta estado, se exixtir na lista de estado.
+     * Deleta estado, se existir na lista de estado.
      *
      * @param m Objeto do AFD
      * @param id Id do estado, que será deletado
@@ -143,7 +143,7 @@ public class AFDmanipulation {
     }
 
     /**
-     * Deleta somete uma transição, se ela existir, será conferido com os parâmetros fornecidos
+     * Deleta somente uma transição, se ela existir, será verificado com os parâmetros fornecidos
      *
      * @param m Objeto de AFD
      * @param from Estado origem
@@ -195,8 +195,8 @@ public class AFDmanipulation {
     }
 
     /**
-     *  Algoritmo de minimidazação, exclui um dos estados equivalentes e atualiza
-     *  transição para o novo ID de estado Criado
+     *  Algoritmo de minimidazação, exclui os estados equivalentes e atualiza
+     *  transição para o ID do estado Criado
      * @param m
      * @param listEquiv
      * @return
@@ -209,7 +209,7 @@ public class AFDmanipulation {
 
         for (int i = 0; i < listEquiv.size(); i++) {
             listExcluiTrans = new ArrayList<Transition>();
-
+            //Cria novos estados de acordo om a equivalencia
             for (Transition trans : m.getFuncTransicao()) {
                 String id ="";
                 if (listEquiv.get(i).getState2().getId() == trans.getFrom().getId()) {
@@ -222,12 +222,13 @@ public class AFDmanipulation {
                     listExcluiTrans.add(trans);
                 }
             }
-
+            //deleta transações
             for (Transition t1: listExcluiTrans) {
                 m = deleteTransition(m, t1.getFrom().getId(), t1.getTo().getId(), t1.getRead());
             }
-
+            //altera transações para novo estado
             m = alteraTransicaoFrom(m,listEquiv.get(i).getState1().getId(),novo.getId());
+            //deleta um dos estados equivalentes.
             m = deleteState(m,listEquiv.get(i).getState2().getId(),novo.getId());
 
         }
@@ -235,8 +236,8 @@ public class AFDmanipulation {
     }
 
     /**
-     *  Metodo que realiza complemeto de um autômato.
-     *  estados final, viram não finais e não finais viram finais.
+     *  Realiza complemeto de um autômato.
+     *  Estados final, viram não finais e não finais viram finais.
      *
      * @param m
      * @return
@@ -252,7 +253,7 @@ public class AFDmanipulation {
     }
 
     /**
-     * Intersecsao  entre dois estados.
+     * Intercessão entre dois Autômatos.
      * @param m1
      * @param m2
      * @return
@@ -261,7 +262,7 @@ public class AFDmanipulation {
         Afd novoAfd = new Afd();
         ArrayList<StateNew> novoStates = new ArrayList<StateNew>();
         ArrayList<TransitionNew> novoTrans = new ArrayList<TransitionNew>();
-
+        //Cria novos estados
         novoStates = criaNovosStatesInter(m1, m2, novoStates);
 
 
@@ -328,7 +329,7 @@ public class AFDmanipulation {
     }
 
     /**
-     *
+     *  União de doia autômatos
      * @param m1
      * @param m2
      * @return
@@ -343,7 +344,7 @@ public class AFDmanipulation {
         ArrayList<Transition> listTransM1 = m1.getFuncTransicao();
         ArrayList<Transition> listTransM2 = m2.getFuncTransicao();
 
-        //VErificando prapara qual estado a nova transição vai
+        //Verificando para qual estado a nova transição vai
         int vai1=-1,vai2=-1;
         for (Character letra:m1.getAlfabeto()) {
             for (StateNew stateNew : novoStates) {
@@ -402,16 +403,24 @@ public class AFDmanipulation {
         return novoAfd;
     }
 
+    /**
+     *   Cria novos estados para o algotitmo de intercessão.
+     * @param m1
+     * @param m2
+     * @param novoStates
+     * @return
+     */
     private ArrayList<StateNew> criaNovosStatesInter(Afd m1, Afd m2, ArrayList<StateNew> novoStates) {
         //Cria novos Estados indice (i,j)
         for (State em1 : m1.getEstado()) {
             for (State em2 : m2.getEstado()) {
+
                 if (em1.iseInicial() && em2.iseInicial()){
                     if (em1.iseFinal() && em2.iseFinal())
                          novoStates.add(new StateNew(em1.getId(),em2.getId(),-1, em1.getX(), em1.getY(), true, em1.iseInicial()));
                     else novoStates.add(new StateNew(em1.getId(),em2.getId(),-1, em1.getX(), em1.getY(), false, em1.iseInicial()));
                 } else {
-
+                    //se os dois estados forem final cria um novo, sendo ele final
                     if (em1.iseFinal() && em2.iseFinal())
                         novoStates.add(new StateNew(em1.getId(),em2.getId(),-1, em1.getX(), em1.getY(), true, false));
                     else novoStates.add(new StateNew(em1.getId(),em2.getId(),-1, em1.getX(), em1.getY(), false, false));
@@ -421,6 +430,13 @@ public class AFDmanipulation {
         return novoStates;
     }
 
+    /**
+     *  Cria novos estados para algoritmo de União
+     * @param m1
+     * @param m2
+     * @param novoStates
+     * @return
+     */
     private ArrayList<StateNew> criaNovosStatesUnion(Afd m1, Afd m2, ArrayList<StateNew> novoStates) {
         //Cria novos Estados indice (i,j)
         for (State em1 : m1.getEstado()) {
@@ -430,7 +446,7 @@ public class AFDmanipulation {
                          novoStates.add(new StateNew(em1.getId(),em2.getId(),-1, em1.getX(), em1.getY(), true, em1.iseInicial()));
                     else novoStates.add(new StateNew(em1.getId(),em2.getId(),-1, em1.getX(), em1.getY(), false, em1.iseInicial()));
                 } else {
-
+                    //Se um ou outro é final, cria um novo estado Final
                     if (em1.iseFinal() || em2.iseFinal())
                         novoStates.add(new StateNew(em1.getId(),em2.getId(),-1, em1.getX(), em1.getY(), true, false));
                     else novoStates.add(new StateNew(em1.getId(),em2.getId(),-1, em1.getX(), em1.getY(), false, false));
