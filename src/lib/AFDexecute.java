@@ -5,6 +5,7 @@ import modelo.State;
 import modelo.Transition;
 
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 
 /**
  * Created by
@@ -31,8 +32,10 @@ public class AFDexecute {
         char palavra[] = word.toCharArray();
         ArrayList<Transition> listTrans = m.getFuncTransicao();
         ArrayList<Character> alfabeto = m.getAlfabeto();
+        boolean achou = false;
+        State estadoAtual = m.geteInicial();  //Estabelece o estado inicial para efetuar primeira verificação
 
-        State estadoAtual = m.geteInicial();  //Estabelece oestado inicialpara efetuara primeiraverificação detroca de
+
 
         for (char w :palavra) {
             if (alfabeto.contains(w)) {
@@ -40,10 +43,14 @@ public class AFDexecute {
                     if (estadoAtual.getId() == t.getFrom().getId()) {
                         if (t.getRead().equals(w)) {
                             estadoAtual = t.getTo();
-                            break;
+                            achou = true;
                         }
-                    }else return false;
+                    }
                 }
+                if (!achou){
+                    return false;
+                }
+
             } else return false;
         }
 
@@ -54,11 +61,20 @@ public class AFDexecute {
     }
 
 
-   public State move(Afd m,State estado ,String word){
+   public Boolean move(Afd m,int ePArtida ,String word){
        char palavra[] = word.toCharArray();
        ArrayList<Transition> listTrans = m.getFuncTransicao();
        ArrayList<Character> alfabeto = m.getAlfabeto();
-       State estadoAtual = estado;
+       State estadoAtual = new State();
+        boolean achou = false;
+
+       for (State e:m.getEstado()){
+           if (e.getId()==ePArtida){
+               estadoAtual=e;
+               break;
+           }
+       }
+
 
        for (char w :palavra) {
            if (alfabeto.contains(w)) {
@@ -66,13 +82,19 @@ public class AFDexecute {
                    if (estadoAtual.getId() == t.getFrom().getId()) {
                        if (t.getRead().equals(w)) {
                            estadoAtual = t.getTo();
-                           break;
+                           achou = true;
                        }
-                   }else return estadoAtual;
+                   }
                }
-           } else return estadoAtual;
+               if (!achou){
+                   return false;
+               }
+           } else return false;
        }
-        return estadoAtual;
+
+       if (estadoAtual.iseFinal()){
+           return true;
+       } else return false;
 
    }
 }

@@ -6,6 +6,7 @@ import lib.AFDmanipulation;
 import lib.XMLmanipulation;
 import modelo.Afd;
 import modelo.Equivalente;
+import modelo.State;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -19,6 +20,15 @@ import java.util.ArrayList;
  */
 
 public class Gui {
+
+    private static String retornaNEstado(Afd m ){
+        String print = "[";
+        for (State e:
+             m.getEstado()) {
+            print+=e.getId()+" ";
+        }
+        return print+"]";
+    }
 
     public static void start() {
         AFDequivalente afde = new AFDequivalente();
@@ -200,9 +210,10 @@ public class Gui {
                     } while (m1.getEstado() == null);
 
                     word = JOptionPane.showInputDialog(null, "Informe a Palavra a ser reconhecida com os caracter " + m1.getAlfabeto().toString());
+                    int ePArtida = Integer.parseInt(JOptionPane.showInputDialog(null, "Informe o estado de partida " + retornaNEstado(m1)));
 
                     // Item 6a
-                    if (exe.accept(m1, word))
+                    if (exe.move(m1,ePArtida,word))
                         JOptionPane.showMessageDialog(null, "Aceita", "Aceita", JOptionPane.INFORMATION_MESSAGE);
                     else JOptionPane.showMessageDialog(null, "Não Aceita", " Não Aceita", JOptionPane.ERROR_MESSAGE);
                     break;
